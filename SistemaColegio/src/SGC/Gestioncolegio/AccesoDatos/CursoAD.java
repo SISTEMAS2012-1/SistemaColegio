@@ -48,12 +48,13 @@ public class CursoAD extends EntidadAD{
     public List<Curso> Consultar(String curso) throws Exception{
         try {
             String sql = "select";
-            sql = sql + " idnomcurso";
-            sql = sql + ",nomcurso";
-            sql = sql + ",fechin";
-            sql = sql + ",fechter";
-            sql = sql + ",idturno";
+            sql = sql + " curso.idcurso";
+            sql = sql + ",curso.nomcurso";
+            sql = sql + ",curso.fechin";
+            sql = sql + ",curso.fechter";
+            sql = sql + ",turno.idturno";            
             sql = sql + " from curso";
+            sql = sql + " inner join turno on curso.idturno = turno.idturno";
             sql = sql + " where";
             sql = sql + " nomcurso like '%"+curso + "%'";
             sql = sql + " order by";
@@ -69,7 +70,7 @@ public class CursoAD extends EntidadAD{
             
             while(rs.next()){
                 obj = new Curso();
-                obj.setIdCurso(rs.getInt("idnomcurso"));
+                obj.setIdCurso(rs.getInt("idcurso"));
                 obj.setNomCurso(rs.getString("nomcurso"));                
                 obj.setFechin(rs.getString("fechin"));
                 obj.setFechter(rs.getString("fechter"));                
@@ -93,7 +94,7 @@ public class CursoAD extends EntidadAD{
     public Curso Consultar(Curso curso) throws Exception{
         try {
             String sql = "select";
-            sql = sql + " idnomcurso";
+            sql = sql + " idcurso";
             sql = sql + " from nomcurso";
             sql = sql + " where";
             sql = sql + " idnomcurso <>" + (curso.getIdCurso()==null?"0":curso.getIdCurso().toString());
