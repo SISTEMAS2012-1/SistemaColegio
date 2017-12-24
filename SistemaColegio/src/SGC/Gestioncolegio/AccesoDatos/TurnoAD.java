@@ -52,6 +52,8 @@ public class TurnoAD extends EntidadAD{
             sql = sql + ",idgrado";
             sql = sql + ",idseccion";
             sql = sql + " from turno";
+            sql = sql + " inner join grado on turno.idgrado = grado.idgrado";
+            sql = sql + " inner join seccion on turno.idseccion = seccion.idseccion";
             sql = sql + " where";
             sql = sql + " turno like '%"+turno + "%'";
             sql = sql + " order by";
