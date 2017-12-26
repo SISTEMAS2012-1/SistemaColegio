@@ -1,18 +1,22 @@
 package SGC.Gestioncolegio.Entidades;
 public class Usuario {
     private Integer IdUsu;
+    private Usuario Usuario_IdUsu;
     private String CodUsu;
     private String ApepatUsu;
     private String ApematUsu;
     private String NomUsu;
     private String GenUsu;
-    private String EdadUsu;
     private String DirUsu;
+    private String EdadUsu;    
     private String ColProc;
     private String Nick;
-    private String Pass;
-    private Usuario Usuario_IdUsu;
+    private String Pass;    
     private Rol oRol;
+    private String Estado;
+    private String Telefono;
+    private String Correo;
+    private String Imagen;
 
     public Usuario() {
     }
@@ -21,20 +25,24 @@ public class Usuario {
         this.IdUsu = IdUsu;
     }
 
-    public Usuario(Integer IdUsu, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String EdadUsu, String DirUsu, String ColProc, String Nick, String Pass, Usuario Usuario_IdUsu, Rol oRol) {
+    public Usuario(Integer IdUsu, Usuario Usuario_IdUsu, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String DirUsu, String EdadUsu, String ColProc, String Nick, String Pass, Rol oRol, String Estado, String Telefono, String Correo, String Imagen) {
         this.IdUsu = IdUsu;
+        this.Usuario_IdUsu = Usuario_IdUsu;
         this.CodUsu = CodUsu;
         this.ApepatUsu = ApepatUsu;
         this.ApematUsu = ApematUsu;
         this.NomUsu = NomUsu;
         this.GenUsu = GenUsu;
-        this.EdadUsu = EdadUsu;
         this.DirUsu = DirUsu;
+        this.EdadUsu = EdadUsu;
         this.ColProc = ColProc;
         this.Nick = Nick;
         this.Pass = Pass;
-        this.Usuario_IdUsu = Usuario_IdUsu;
         this.oRol = oRol;
+        this.Estado = Estado;
+        this.Telefono = Telefono;
+        this.Correo = Correo;
+        this.Imagen = Imagen;
     }
 
     public Integer getIdUsu() {
@@ -43,6 +51,14 @@ public class Usuario {
 
     public void setIdUsu(Integer IdUsu) {
         this.IdUsu = IdUsu;
+    }
+
+    public Usuario getUsuario_IdUsu() {
+        return Usuario_IdUsu;
+    }
+
+    public void setUsuario_IdUsu(Usuario Usuario_IdUsu) {
+        this.Usuario_IdUsu = Usuario_IdUsu;
     }
 
     public String getCodUsu() {
@@ -85,20 +101,20 @@ public class Usuario {
         this.GenUsu = GenUsu;
     }
 
-    public String getEdadUsu() {
-        return EdadUsu;
-    }
-
-    public void setEdadUsu(String EdadUsu) {
-        this.EdadUsu = EdadUsu;
-    }
-
     public String getDirUsu() {
         return DirUsu;
     }
 
     public void setDirUsu(String DirUsu) {
         this.DirUsu = DirUsu;
+    }
+
+    public String getEdadUsu() {
+        return EdadUsu;
+    }
+
+    public void setEdadUsu(String EdadUsu) {
+        this.EdadUsu = EdadUsu;
     }
 
     public String getColProc() {
@@ -125,20 +141,44 @@ public class Usuario {
         this.Pass = Pass;
     }
 
-    public Usuario getUsuario_IdUsu() {
-        return Usuario_IdUsu;
-    }
-
-    public void setUsuario_IdUsu(Usuario Usuario_IdUsu) {
-        this.Usuario_IdUsu = Usuario_IdUsu;
-    }
-
     public Rol getoRol() {
         return oRol;
     }
 
     public void setoRol(Rol oRol) {
         this.oRol = oRol;
+    }
+
+    public String getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(String Estado) {
+        this.Estado = Estado;
+    }
+
+    public String getTelefono() {
+        return Telefono;
+    }
+
+    public void setTelefono(String Telefono) {
+        this.Telefono = Telefono;
+    }
+
+    public String getCorreo() {
+        return Correo;
+    }
+
+    public void setCorreo(String Correo) {
+        this.Correo = Correo;
+    }
+
+    public String getImagen() {
+        return Imagen;
+    }
+
+    public void setImagen(String Imagen) {
+        this.Imagen = Imagen;
     }
 
     
