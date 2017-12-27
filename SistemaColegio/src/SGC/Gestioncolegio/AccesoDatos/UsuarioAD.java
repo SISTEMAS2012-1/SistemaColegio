@@ -15,7 +15,7 @@ public class UsuarioAD extends EntidadAD{
     
     public Integer getId() throws Exception{
         try {
-            String sql = "select nextval('usuario_idusu_seq') as idusu";
+            String sql = "select nextval('usuario_idusu_seq') as idusu;";
             
             Integer id = 0;
             
