@@ -1,25 +1,25 @@
 package SGC.Gestioncolegio.LogicaNegocios;
 
 import Conector.Conexion;
-import SGC.Gestioncolegio.AccesoDatos.SemestreAD;
-import SGC.Gestioncolegio.Entidades.Semestre;
+import SGC.Gestioncolegio.AccesoDatos.CursoAD;
+import SGC.Gestioncolegio.Entidades.Curso;
 import java.util.List;
 
-public class SemestreLN {
-    public List<Semestre> ConsultarSemestre(String semestre) throws Exception{
+public class CursoLN {
+    public List<Curso> ConsultarCurso(String curso) throws Exception{
         Conexion conexion = null;
         
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            SemestreAD semestreAD = new SemestreAD(conexion.getConnection());
-            List<Semestre> lstsemestre = semestreAD.Consultar(semestre);
+            CursoAD cursoAD = new CursoAD(conexion.getConnection());
+            List<Curso> lstCurso = cursoAD.Consultar(curso);
             
-            return lstsemestre;
+            return lstCurso;
         } catch (Exception e) {
             throw e;
-        } finally{
+        } finally {
             if(conexion != null){
                 if(conexion.getConnection() != null){
                     if(!conexion.EstaCerrada()){
@@ -30,20 +30,20 @@ public class SemestreLN {
         }
     }
     
-    public Semestre ConsultarSemestre(Semestre semestre) throws Exception{
+    public Curso ConsultarCurso(Curso curso) throws Exception{
         Conexion conexion = null;
         
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            SemestreAD semestreAD = new SemestreAD(conexion.getConnection());
-            Semestre semestreEncontrado = semestreAD.Consultar(semestre);
+            CursoAD cursoAD = new CursoAD(conexion.getConnection());
+            Curso cursoEncontrado = cursoAD.Consultar(curso);
             
-            return semestreEncontrado;
+            return cursoEncontrado;
         } catch (Exception e) {
             throw e;
-        } finally{
+        } finally {
             if(conexion != null){
                 if(conexion.getConnection() != null){
                     if(!conexion.EstaCerrada()){
@@ -54,27 +54,40 @@ public class SemestreLN {
         }
     }
     
-    public void RegistrarSemestre(Semestre semestre) throws Exception{
+    public void RegistrarCurso(Curso curso) throws Exception{
+        Conexion conexion = null;        
+        try {
+            conexion = new Conexion();
+            conexion.Abrir(true);
+            
+            CursoAD cursoAD = new CursoAD(conexion.getConnection());
+            cursoAD.RegistrarCurso(curso);
+        } catch (Exception e) {
+            throw e;
+        } 
+    }
+    
+    public void ModificarCurso(Curso curso) throws Exception{
         Conexion conexion = null;
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            SemestreAD semestreAD = new SemestreAD(conexion.getConnection());
-            semestreAD.RegistrarSemestre(semestre);
+            CursoAD cursoAD = new CursoAD(conexion.getConnection());
+            cursoAD.ActualizarCurso(curso);
         } catch (Exception e) {
             throw e;
         }
     }
     
-    public void ActualizarSemestre(Semestre semestre) throws Exception{
+    public void EliminarCurso(Curso curso) throws Exception{
         Conexion conexion = null;
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            SemestreAD semestreAD = new SemestreAD(conexion.getConnection());
-            semestreAD.ActualizarSemestre(semestre);
+            CursoAD cursoAD = new CursoAD(conexion.getConnection());
+            cursoAD.EliminarCurso(curso);
         } catch (Exception e) {
             throw e;
         }
