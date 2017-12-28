@@ -1,22 +1,22 @@
 package SGC.Gestioncolegio.LogicaNegocios;
 
 import Conector.Conexion;
-import SGC.Gestioncolegio.AccesoDatos.GradoAD;
-import SGC.Gestioncolegio.Entidades.Grado;
+import SGC.Gestioncolegio.AccesoDatos.TurnoAD;
+import SGC.Gestioncolegio.Entidades.Turno;
 import java.util.List;
 
-public class GradoLN {
-    public List<Grado> ConsultarGrado(String curso) throws Exception{
+public class TurnoLN {
+    public List<Turno> ConsultarTurno(String turno) throws Exception{
         Conexion conexion = null;
         
         try {
-         conexion = new Conexion();
-         conexion.Abrir(true);
-         
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            List<Grado> lstGrado = gradoAD.Consultar(curso);
+            conexion = new Conexion();
+            conexion.Abrir(true);
             
-            return lstGrado;
+            TurnoAD turnoAD = new TurnoAD(conexion.getConnection());
+            List<Turno> lstTurno = turnoAD.Consultar(turno);
+            
+            return lstTurno;           
         } catch (Exception e) {
             throw e;
         } finally {
@@ -30,53 +30,55 @@ public class GradoLN {
         }
     }
     
-    public Grado ConsultarGrado(Grado grado) throws Exception{
+    public Turno ConsultarTurno(Turno turno) throws Exception{
         Conexion conexion = null;
         
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            Grado gradoEncontrado = gradoAD.Consultar(grado);
+            TurnoAD turnoAD = new TurnoAD(conexion.getConnection());
+            Turno turnoEncontrado = turnoAD.Consultar(turno);
             
-            return gradoEncontrado;
+            return turnoEncontrado;
         } catch (Exception e) {
             throw e;
         } finally {
-            if(conexion != null){
+            if(conexion !=  null){
                 if(conexion.getConnection() != null){
                     if(!conexion.EstaCerrada()){
                         conexion.Cerrar();
                     }
                 }
             }
-        }      
+        }
     }
     
-    public void RegistrarGrado(Grado grado) throws Exception{
+    public void RegistrarTurno(Turno turno) throws Exception{
         Conexion conexion = null;
+        
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            gradoAD.RegistrarGrado(grado);
+            TurnoAD turnoAD = new TurnoAD(conexion.getConnection());
+            turnoAD.RegistrarTurno(turno);
         } catch (Exception e) {
             throw e;
         }
     }
     
-    public void ActualizarGrado(Grado grado) throws Exception{
+    public void ActualizarTurno(Turno turno) throws Exception{
         Conexion conexion = null;
+        
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            gradoAD.ActualizarGrado(grado);
+            TurnoAD turnoAD = new TurnoAD(conexion.getConnection());
+            turnoAD.ActualizarTurno(turno);
         } catch (Exception e) {
-            throw e;            
+            throw e;
         }
     }
 }

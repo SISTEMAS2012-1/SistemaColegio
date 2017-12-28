@@ -1,22 +1,23 @@
 package SGC.Gestioncolegio.LogicaNegocios;
 
+
 import Conector.Conexion;
-import SGC.Gestioncolegio.AccesoDatos.GradoAD;
-import SGC.Gestioncolegio.Entidades.Grado;
+import SGC.Gestioncolegio.AccesoDatos.SeccionAD;
+import SGC.Gestioncolegio.Entidades.Seccion;
 import java.util.List;
 
-public class GradoLN {
-    public List<Grado> ConsultarGrado(String curso) throws Exception{
+public class SeccionLN {
+    public List<Seccion> ConsultarSeccion(String seccion) throws Exception{
         Conexion conexion = null;
         
         try {
-         conexion = new Conexion();
-         conexion.Abrir(true);
-         
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            List<Grado> lstGrado = gradoAD.Consultar(curso);
+            conexion = new Conexion();
+            conexion.Abrir(true);
             
-            return lstGrado;
+            SeccionAD seccionAD = new SeccionAD(conexion.getConnection());
+            List<Seccion> lstseccion = seccionAD.Consultar(seccion);
+            
+            return lstseccion;
         } catch (Exception e) {
             throw e;
         } finally {
@@ -30,17 +31,16 @@ public class GradoLN {
         }
     }
     
-    public Grado ConsultarGrado(Grado grado) throws Exception{
+    public Seccion consultarSeccion(Seccion seccion) throws Exception{
         Conexion conexion = null;
-        
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            Grado gradoEncontrado = gradoAD.Consultar(grado);
+            SeccionAD seccionAD = new SeccionAD(conexion.getConnection());
+            Seccion seccionEncontrada = seccionAD.Consultar(seccion);
             
-            return gradoEncontrado;
+            return seccionEncontrada;
         } catch (Exception e) {
             throw e;
         } finally {
@@ -51,32 +51,34 @@ public class GradoLN {
                     }
                 }
             }
-        }      
+        }
     }
     
-    public void RegistrarGrado(Grado grado) throws Exception{
+    public void RegistrarSeccion(Seccion seccion) throws Exception{
         Conexion conexion = null;
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            gradoAD.RegistrarGrado(grado);
+            SeccionAD seccionAD = new SeccionAD(conexion.getConnection());
+            seccionAD.RegistrarSeccion(seccion);
         } catch (Exception e) {
             throw e;
         }
     }
     
-    public void ActualizarGrado(Grado grado) throws Exception{
+    public void ActualizarSeccion(Seccion seccion) throws Exception{
         Conexion conexion = null;
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
-            GradoAD gradoAD = new GradoAD(conexion.getConnection());
-            gradoAD.ActualizarGrado(grado);
+            SeccionAD seccionAD = new SeccionAD(conexion.getConnection());
+            seccionAD.ActualizarSeccion(seccion);
+            
         } catch (Exception e) {
-            throw e;            
+            throw e;
         }
     }
 }
+
