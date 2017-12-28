@@ -89,5 +89,56 @@ public class UsuarioLN {
     public void ModificarUsuarioAlumno(Usuario usuario) throws Exception{
         Conexion conexion = null;
         
+        try {
+            conexion = new Conexion();
+            conexion.Abrir(true);
+            
+            UsuarioAD usuarioAD = new UsuarioAD(conexion.getConnection());
+            usuarioAD.ModificarAlumno(usuario);
+        } catch (Exception e) {
+            throw e;
+        }        
+    }
+    
+    public void ModificarUsuarioProfesor(Usuario usuario) throws Exception{
+        Conexion conexion = null;
+        
+        try {
+            conexion = new Conexion();
+            conexion.Abrir(true);
+            
+            UsuarioAD usuarioAD = new UsuarioAD(conexion.getConnection());
+            usuarioAD.ModificarProfesor(usuario);
+        } catch (Exception e) {
+            throw e;
+        }        
+    }
+    
+    public void ModificarUsuarioSecretaria(Usuario usuario) throws Exception{
+        Conexion conexion = null;
+        
+        try {
+            conexion = new Conexion();
+            conexion.Abrir(true);
+            
+            UsuarioAD usuarioAD = new UsuarioAD(conexion.getConnection());
+            usuarioAD.ModificarSecretaria(usuario);
+        } catch (Exception e) {
+            throw e;
+        }        
+    }
+    
+    public void ModificarUsuarioDirector(Usuario usuario) throws Exception{
+        Conexion conexion = null;
+        
+        try {
+            conexion = new Conexion();
+            conexion.Abrir(true);
+            
+            UsuarioAD usuarioAD = new UsuarioAD(conexion.getConnection());
+            usuarioAD.ModificarDirector(usuario);
+        } catch (Exception e) {
+            throw e;
+        }        
     }
 }
