@@ -7,14 +7,37 @@ import SGC.Gestioncolegio.Entidades.Usuario;
 import java.util.List;
 
 public class UsuarioLN {
-    public Usuario ConsultarUsuario(String nick,String pass,Rol rol) throws Exception{
+    
+    public Usuario ConsultarUsuario(String nombre) throws Exception{
         Conexion conexion = null;
         try {
             conexion = new Conexion();
             conexion.Abrir(true);
             
             UsuarioAD usuarioAD = new UsuarioAD(conexion.getConnection());
-            Usuario usuarioEncontrado = usuarioAD.ValidarLogin(nick, pass, rol);
+            Usuario usuarioEncontrado = usuarioAD.ConsultarUsuario(nombre);
+            
+            return usuarioEncontrado;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if(conexion != null){
+                if(conexion.getConnection() != null){
+                    if(!conexion.EstaCerrada()){
+                        conexion.Cerrar();
+                    }
+                }
+            }
+        }
+    }
+    public Usuario ConsultarUsuario(String nick,String pass) throws Exception{
+        Conexion conexion = null;
+        try {
+            conexion = new Conexion();
+            conexion.Abrir(true);
+            
+            UsuarioAD usuarioAD = new UsuarioAD(conexion.getConnection());
+            Usuario usuarioEncontrado = usuarioAD.ValidarLogin(nick, pass);
             
             return usuarioEncontrado;
         } catch (Exception e) {

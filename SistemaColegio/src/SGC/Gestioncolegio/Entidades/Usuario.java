@@ -12,7 +12,7 @@ public class Usuario {
     private String ColProc;
     private String Nick;
     private String Pass;    
-    private Rol oRol;
+    private String Rol;
     private String Estado;
     private String Telefono;
     private String Correo;
@@ -25,7 +25,7 @@ public class Usuario {
         this.IdUsu = IdUsu;
     }
 
-    public Usuario(Integer IdUsu, Usuario Usuario_IdUsu, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String DirUsu, String EdadUsu, String ColProc, String Nick, String Pass, Rol oRol, String Estado, String Telefono, String Correo, String Imagen) {
+    public Usuario(Integer IdUsu, Usuario Usuario_IdUsu, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String DirUsu, String EdadUsu, String ColProc, String Nick, String Pass, String Rol, String Estado, String Telefono, String Correo, String Imagen) {
         this.IdUsu = IdUsu;
         this.Usuario_IdUsu = Usuario_IdUsu;
         this.CodUsu = CodUsu;
@@ -38,7 +38,7 @@ public class Usuario {
         this.ColProc = ColProc;
         this.Nick = Nick;
         this.Pass = Pass;
-        this.oRol = oRol;
+        this.Rol = Rol;
         this.Estado = Estado;
         this.Telefono = Telefono;
         this.Correo = Correo;
@@ -141,12 +141,12 @@ public class Usuario {
         this.Pass = Pass;
     }
 
-    public Rol getoRol() {
-        return oRol;
+    public String getRol() {
+        return Rol;
     }
 
-    public void setoRol(Rol oRol) {
-        this.oRol = oRol;
+    public void setRol(String Rol) {
+        this.Rol = Rol;
     }
 
     public String getEstado() {

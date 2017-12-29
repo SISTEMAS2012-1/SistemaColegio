@@ -43,24 +43,50 @@ public class UsuarioAD extends EntidadAD{
             }
         }
     }
-    
-//Consultar Usuario a Ingresar    
-    public Usuario ValidarLogin(String nick, String pass, Rol rol) throws Exception{
+//Consultar Usuario por Rol
+    public Usuario ConsultarUsuario(String nombre) throws Exception{
         try {
-            String sql = "select ";
-            sql = sql + " usuario.idusu";
-            sql = sql + ",usuario.codusu";
-            sql = sql + ",usuario.apepatusu";
-            sql = sql + ",usuario.apematusu";
-            sql = sql + ",usuario.nomusu";
-            sql = sql + ",rol.idrol";
-            sql = sql + ",rol.nomrol";
-            sql = sql + " from usuario";
-            sql = sql + " inner join rol on usuario.idrol  = rol.idrol";
+            String sql = "select * from usuario ";
+            sql = sql+ " where ";
+            sql = sql + "nomusu like '"+nombre+"%'";
+            sql = sql + ";";
+            Usuario obj = null;
+            
+            EjecutarSentenciaSQL(sql);
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+                obj = new Usuario();
+                
+                obj.setIdUsu(rs.getInt("idusu"));
+                obj.setCodUsu(rs.getString("codusu"));
+                obj.setNomUsu(rs.getString("nomusu"));
+                obj.setApepatUsu(rs.getString("apepatusu"));
+                obj.setApematUsu(rs.getString("apematusu"));
+                obj.setRol(rs.getString("rol"));
+            }
+            return obj;
+        } catch (Exception e) {
+            throw e;
+        } finally{
+            if(rs != null){
+                rs.close();
+            }
+            if(ps != null){
+                ps.close();
+            }
+        }
+        
+    }
+//Consultar Usuario a Ingresar    
+    public Usuario ValidarLogin(String nick, String pass) throws Exception{
+        try {
+            String sql = "select * from usuario";
             sql = sql + " where";
-            sql = sql + " usuario.nick = '"+nick+"'";
+            sql = sql + " nick = '"+nick+"'";
             sql = sql + " and pass = '"+pass+"'";
-            sql = sql + " and rol.idrol = '"+rol.getIdRol()+"'";
+//            sql = sql + " and rol = '"+rol+"'";
             sql = sql + " ;";
             
             Usuario obj = null;
@@ -72,11 +98,14 @@ public class UsuarioAD extends EntidadAD{
             while(rs.next()){
                 obj = new Usuario();
                 
-                obj.setIdUsu(rs.getInt("usuario.idusu"));
-                obj.setCodUsu(rs.getString("usuario.codusu"));
-                obj.setApepatUsu(rs.getString("usuario.apepatusu"));
-                obj.setApematUsu(rs.getString("usuario.apematusu"));
-                obj.setNomUsu(rs.getString("usuario.nomusu"));                
+                obj.setIdUsu(rs.getInt("idusu"));
+                obj.setCodUsu(rs.getString("codusu"));
+                obj.setApepatUsu(rs.getString("apepatusu"));
+                obj.setApematUsu(rs.getString("apematusu"));
+                obj.setNomUsu(rs.getString("nomusu"));                                                
+                obj.setNick(rs.getString("nick"));
+                obj.setPass(rs.getString("pass"));
+                obj.setRol(rs.getString("rol"));
             }
             return obj;            
         } catch (Exception e) {
@@ -114,10 +143,10 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ",colegioprocusu";
             dml = dml + ",nick";
             dml = dml + ",pass";
-            dml = dml + ",idrol";
+            dml = dml + ",rol";
             dml = dml + ") values (";
             dml = dml + "'"+obj.getIdUsu().toString()+"'";
-            dml = dml + ",'4'";
+            dml = dml + ",'SECRETARIA'";
             dml = dml + ",'"+obj.getCodUsu()+"'";
             dml = dml + ",'"+obj.getApepatUsu()+"'";
             dml = dml + ",'"+obj.getApematUsu()+"'";
@@ -132,7 +161,7 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ",'"+obj.getColProc()+"'";
             dml = dml + ",'"+obj.getNick()+"'";
             dml = dml + ",'"+obj.getPass()+"'";
-            dml = dml + ",'2'";
+            dml = dml + ",'ALUMNO'";
             dml = dml + ");";
             
             EjecutarSentenciaDML(dml);                     
@@ -165,7 +194,7 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ",idrol";
             dml = dml + ") values (";
             dml = dml + "'"+obj.getIdUsu().toString()+"'";
-            dml = dml + ",'4'";
+            dml = dml + ",'SECRETARIA'";
 //            dml = dml + ",'"+obj.getCodUsu()+"'";
             dml = dml + ",'"+obj.getApepatUsu()+"'";
             dml = dml + ",'"+obj.getApematUsu()+"'";
@@ -180,7 +209,7 @@ public class UsuarioAD extends EntidadAD{
 //            dml = dml + ",'"+obj.getColProc()+"'";
             dml = dml + ",'"+obj.getNick()+"'";
             dml = dml + ",'"+obj.getPass()+"'";
-            dml = dml + ",'3'";
+            dml = dml + ",'PROFESOR'";
             dml = dml + ");";
             
             EjecutarSentenciaDML(dml);                     
@@ -229,7 +258,7 @@ public class UsuarioAD extends EntidadAD{
 //            dml = dml + ",'"+obj.getColProc()+"'";
             dml = dml + ",'"+obj.getNick()+"'";
             dml = dml + ",'"+obj.getPass()+"'";
-            dml = dml + ",'5'";
+            dml = dml + ",'DIRECTOR'";
             dml = dml + ");";
             
             EjecutarSentenciaDML(dml);                     
@@ -263,7 +292,7 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ",idrol";
             dml = dml + ") values (";
             dml = dml + "'"+obj.getIdUsu().toString()+"'";
-            dml = dml + ",'5'";
+            dml = dml + ",'DIRECTOR'";
 //            dml = dml + ",'"+obj.getCodUsu()+"'";
             dml = dml + ",'"+obj.getApepatUsu()+"'";
             dml = dml + ",'"+obj.getApematUsu()+"'";
@@ -278,7 +307,7 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ",'"+obj.getColProc()+"'";
             dml = dml + ",'"+obj.getNick()+"'";
             dml = dml + ",'"+obj.getPass()+"'";
-            dml = dml + ",'4'";
+            dml = dml + ",'SECRETARIA'";
             dml = dml + ");";
             
             EjecutarSentenciaDML(dml);                     
@@ -292,7 +321,7 @@ public class UsuarioAD extends EntidadAD{
     public void ModificarAlumno(Usuario obj) throws Exception{
         try {
             String dml = "update usuario set";
-            dml = dml + " usuario_idusu = '4'";
+            dml = dml + " usuario_idusu = 'SECRETARIA'";
             dml = dml + ",codusu = '"+obj.getCodUsu()+"'";
             dml = dml + ",apepatusu = '"+obj.getApepatUsu()+"'";
             dml = dml + ",apematusu = '"+obj.getApematUsu()+"'";
@@ -303,13 +332,13 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ",colegioprocusu = '"+obj.getColProc()+"'";
             dml = dml + ",nick = '"+obj.getNick()+"'";
             dml = dml + ",pass = '"+obj.getPass()+"'";
-            dml = dml + ",idrol = '2'";
+            dml = dml + ",idrol = 'ALUMNO'";
             dml = dml + ",estado = 'HABILITADO'";
             dml = dml + ",telefono = '"+obj.getTelefono()+"'";
             dml = dml + ",correo = '"+obj.getCorreo()+"'";
             dml = dml + ",imagen = '"+obj.getImagen()+"'";
             dml = dml + " where";
-            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = '2' and estado = 'HABILITADO' and usuario_idusuario='4'";
+            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = 'ALUMNO' and estado = 'HABILITADO' and usuario_idusuario='SECRETARIA'";
             dml = dml + ";";
             
             EjecutarSentenciaDML(dml);            
@@ -322,7 +351,7 @@ public class UsuarioAD extends EntidadAD{
     public void ModificarProfesor(Usuario obj) throws Exception{
         try {
             String dml = "update usuario set";
-            dml = dml + " usuario_idusu = '4'";
+            dml = dml + " usuario_idusu = 'SECRETARIA'";
             dml = dml + ",codusu = '"+obj.getCodUsu()+"'";
             dml = dml + ",apepatusu = '"+obj.getApepatUsu()+"'";
             dml = dml + ",apematusu = '"+obj.getApematUsu()+"'";
@@ -333,13 +362,13 @@ public class UsuarioAD extends EntidadAD{
 //            dml = dml + ",colegioprocusu = '"+obj.getColProc()+"'";
             dml = dml + ",nick = '"+obj.getNick()+"'";
             dml = dml + ",pass = '"+obj.getPass()+"'";
-            dml = dml + ",idrol = '3'";
+            dml = dml + ",idrol = 'PROFESOR'";
             dml = dml + ",estado = 'HABILITADO'";
             dml = dml + ",telefono = '"+obj.getTelefono()+"'";
             dml = dml + ",correo = '"+obj.getCorreo()+"'";
             dml = dml + ",imagen = '"+obj.getImagen()+"'";
             dml = dml + " where";
-            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = '3' and estado = 'HABILITADO' and usuario_idusuario='4'";
+            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = 'PROFESOR' and estado = 'HABILITADO' and usuario_idusuario='SECRETARIA'";
             dml = dml + ";";
             
             EjecutarSentenciaDML(dml);            
@@ -363,13 +392,13 @@ public class UsuarioAD extends EntidadAD{
 //            dml = dml + ",colegioprocusu = '"+obj.getColProc()+"'";
             dml = dml + ",nick = '"+obj.getNick()+"'";
             dml = dml + ",pass = '"+obj.getPass()+"'";
-            dml = dml + ",idrol = '5'";
+            dml = dml + ",idrol = 'DIRECTOR'";
             dml = dml + ",estado = 'HABILITADO'";
             dml = dml + ",telefono = '"+obj.getTelefono()+"'";
             dml = dml + ",correo = '"+obj.getCorreo()+"'";
             dml = dml + ",imagen = '"+obj.getImagen()+"'";
             dml = dml + " where";
-            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = '5' and estado = 'HABILITADO' and usuario_idusuario='1'";
+            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = 'DIRECTOR' and estado = 'HABILITADO' and usuario_idusuario='1'";
             dml = dml + ";";
             
             EjecutarSentenciaDML(dml);            
@@ -382,7 +411,7 @@ public class UsuarioAD extends EntidadAD{
     public void ModificarSecretaria(Usuario obj) throws Exception{
         try {
             String dml = "update usuario set";
-            dml = dml + " usuario_idusu = '5'";
+            dml = dml + " usuario_idusu = 'DIRECTOR'";
             dml = dml + ",codusu = '"+obj.getCodUsu()+"'";
             dml = dml + ",apepatusu = '"+obj.getApepatUsu()+"'";
             dml = dml + ",apematusu = '"+obj.getApematUsu()+"'";
@@ -393,13 +422,13 @@ public class UsuarioAD extends EntidadAD{
 //            dml = dml + ",colegioprocusu = '"+obj.getColProc()+"'";
             dml = dml + ",nick = '"+obj.getNick()+"'";
             dml = dml + ",pass = '"+obj.getPass()+"'";
-            dml = dml + ",idrol = '4'";
+            dml = dml + ",idrol = 'SECRETARIA'";
             dml = dml + ",estado = 'HABILITADO'";
             dml = dml + ",telefono = '"+obj.getTelefono()+"'";
             dml = dml + ",correo = '"+obj.getCorreo()+"'";
             dml = dml + ",imagen = '"+obj.getImagen()+"'";
             dml = dml + " where";
-            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = '4' and estado = 'HABILITADO' and usuario_idusuario='5'";
+            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and idrol = 'SECRETARIA' and estado = 'HABILITADO' and usuario_idusuario='DIRECTOR'";
             dml = dml + ";";
             
             EjecutarSentenciaDML(dml);            
