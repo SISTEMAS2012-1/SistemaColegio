@@ -112,6 +112,10 @@ public class Usuarios extends javax.swing.JDialog {
        btnFoto.setEnabled(false);
        btnGuardar.setEnabled(false);
        btnCancelar.setEnabled(false);
+       lblId.setText("");
+       txtID.setText("");
+       lblId.setVisible(false);
+       txtID.setVisible(false);
     }
     
     public void Desbloquear(){
@@ -146,6 +150,10 @@ public class Usuarios extends javax.swing.JDialog {
         btnFoto.setEnabled(true);
         btnGuardar.setEnabled(true);
         btnCancelar.setEnabled(true);
+//        lblId.setText("");
+//        txtID.setText("");
+//        lblId.setVisible(false);
+//        txtID.setVisible(false);
         
     }
     
@@ -273,6 +281,8 @@ public class Usuarios extends javax.swing.JDialog {
         txtRol = new javax.swing.JTextField();
         btnFoto = new javax.swing.JButton();
         lblFoto = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
+        lblId = new javax.swing.JLabel();
         pnlDetalle2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
@@ -472,6 +482,16 @@ public class Usuarios extends javax.swing.JDialog {
 
         lblFoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        txtID.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        txtID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIDActionPerformed(evt);
+            }
+        });
+
+        lblId.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblId.setText("Id");
+
         javax.swing.GroupLayout pnlDetalleLayout = new javax.swing.GroupLayout(pnlDetalle);
         pnlDetalle.setLayout(pnlDetalleLayout);
         pnlDetalleLayout.setHorizontalGroup(
@@ -480,6 +500,10 @@ public class Usuarios extends javax.swing.JDialog {
             .addGroup(pnlDetalleLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlDetalleLayout.createSequentialGroup()
+                        .addComponent(lblId, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtID))
                     .addGroup(pnlDetalleLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -515,7 +539,8 @@ public class Usuarios extends javax.swing.JDialog {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnCancelar))
                                 .addComponent(txtApemat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cbxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlDetalleLayout.createSequentialGroup()
                         .addComponent(lblApepat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -586,7 +611,11 @@ public class Usuarios extends javax.swing.JDialog {
                         .addGroup(pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblRol)
                             .addComponent(txtRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(49, 49, 49)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblId))
+                        .addGap(24, 24, 24)
                         .addGroup(pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnGuardar)
                             .addComponent(btnCancelar)))
@@ -844,10 +873,11 @@ public class Usuarios extends javax.swing.JDialog {
                 }
                 
                 Usuario usuario = new Usuario();
+                
                 usuario.setApepatUsu(txtApepat.getText().trim().toUpperCase());
                 usuario.setApematUsu(txtApemat.getText().trim().toUpperCase());
                 usuario.setNomUsu(txtNombre.getText().trim().toUpperCase());
-                usuario.setGenUsu(cbxGenero.getSelectedItem().toString().substring(0,1));
+                usuario.setGenUsu(cbxGenero.getSelectedItem().toString());
                 usuario.setEdadUsu(txtEdad.getText().trim().toUpperCase());
                 usuario.setDirUsu(txtDireccion.getText().trim().toUpperCase());
                 usuario.setColProc(txtColPro.getText().trim().toUpperCase());
@@ -866,45 +896,58 @@ public class Usuarios extends javax.swing.JDialog {
                 else{
                     if(txtRol.getText().trim().toUpperCase().equals("ALUMNO")){
                         
-//                        if(modificar){
-//                            usuarioLN.ModificarUsuarioAlumno(usuario);
-//                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                            modificar = false;
-//                        }else{
+                        if(modificar){
+                            usuario.setIdUsu(Integer.parseInt(txtID.getText().trim().toUpperCase()));
                             usuarioLN.ModificarUsuarioAlumno(usuario);
+                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                            modificar = false;                            
+                            limpiar();
+                        }
+                        else{                            
+                            usuarioLN.RegistrarUsuarioAlumno(usuario);
                             JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                        }
+                            limpiar();
+                        }
                     }
-//                    if(txtRol.getText().trim().toUpperCase().equals("PROFESOR")){
-//                        if(modificar){
-//                            usuarioLN.ModificarUsuarioProfesor(usuario);
-//                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                            modificar = false;
-//                        }else{
-//                            usuarioLN.RegistrarUsuarioProfesor(usuario);
-//                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                        }
-//                    }
-//                    if(txtRol.getText().trim().toUpperCase().equals("SECRETARIA")){
-//                        if(modificar){
-//                            usuarioLN.ModificarUsuarioSecretaria(usuario);
-//                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                            modificar = false;
-//                        }else{
-//                            usuarioLN.RegistrarSecretaria(usuario);
-//                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                        }
-//                    }
-//                    if(txtRol.getText().trim().toUpperCase().equals("DIRECTOR")){
-//                        if(modificar){
-//                            usuarioLN.ModificarUsuarioDirector(usuario);
-//                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                            modificar = false;
-//                        }else{
-//                            usuarioLN.RegistrarDirector(usuario);
-//                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-//                        }
-//                    }
+                    if(txtRol.getText().trim().toUpperCase().equals("PROFESOR")){
+                        if(modificar){
+                            usuario.setIdUsu(Integer.parseInt(txtID.getText().trim().toUpperCase()));
+                            usuarioLN.ModificarUsuarioProfesor(usuario);
+                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                            modificar = false;
+                            limpiar();
+                        }else{
+                            usuarioLN.RegistrarUsuarioProfesor(usuario);
+                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                            limpiar();
+                        }
+                    }
+                    if(txtRol.getText().trim().toUpperCase().equals("SECRETARIA")){
+                        if(modificar){
+//                            usuario.setIdUsu(Integer.parseInt(txtID.getText().trim().toUpperCase()));
+                            usuarioLN.ModificarUsuarioSecretaria(usuario);
+                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                            modificar = false;
+                            limpiar();
+                        }else{
+                            usuarioLN.RegistrarSecretaria(usuario);
+                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                            limpiar();
+                        }
+                    }
+                    if(txtRol.getText().trim().toUpperCase().equals("DIRECTOR")){
+                        if(modificar){
+//                            usuario.setIdUsu(Integer.parseInt(txtID.getText().trim().toUpperCase()));
+                            usuarioLN.ModificarUsuarioDirector(usuario);
+                            JOptionPane.showMessageDialog(null,"Se modifico con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                            modificar = false;
+                            limpiar();
+                        }else{
+                            usuarioLN.RegistrarDirector(usuario);
+                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                            limpiar();
+                        }
+                    }
                 }                
             }
             ListarUsuarioAlumno();
@@ -934,6 +977,7 @@ public class Usuarios extends javax.swing.JDialog {
             Usuario usuario = usuarioLN.ConsultarUsuariosAlumnos(id);
 
             if(usuario != null){
+                txtID.setText(id.toString());
                 txtCodigo.setText(usuario.getCodUsu());
                 txtApepat.setText(usuario.getApepatUsu());
                 txtApemat.setText(usuario.getApematUsu());
@@ -955,7 +999,7 @@ public class Usuarios extends javax.swing.JDialog {
                 txtTelefono.setText(usuario.getTelefono());
                 txtCorreo.setText(usuario.getCorreo()); 
                 Nuevo();
-    //                    modificar = true;
+                modificar = true;
             } else {
                 JOptionPane.showMessageDialog(null,"Usuaro no registrado","Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);                 
            }
@@ -1084,6 +1128,10 @@ public class Usuarios extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tblUsuariosMouseClicked
 
+    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIDActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
@@ -1106,6 +1154,7 @@ public class Usuarios extends javax.swing.JDialog {
     private javax.swing.JLabel lblEdad;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblGenero;
+    private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblNombre1;
     private javax.swing.JLabel lblRol;
@@ -1124,6 +1173,7 @@ public class Usuarios extends javax.swing.JDialog {
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtEdad;
+    private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtRol;
     private javax.swing.JTextField txtTelefono;

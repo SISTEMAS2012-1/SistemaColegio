@@ -143,6 +143,8 @@ public class UsuarioAD extends EntidadAD{
             sql = sql + ",colegioprocusu";
             sql = sql + ",nick";
             sql = sql + ",pass";
+            sql = sql + ",telefono";
+            sql = sql + ",correo";
             sql = sql + " from usuario ";
             sql = sql + " where ";
             sql = sql + " idusu = " + id.toString();
@@ -168,6 +170,8 @@ public class UsuarioAD extends EntidadAD{
                 obj.setColProc(rs.getString("colegioprocusu"));
                 obj.setNick(rs.getString("nick"));
                 obj.setPass(rs.getString("pass"));
+                obj.setTelefono(rs.getString("telefono"));
+                obj.setCorreo(rs.getString("correo"));
                 
             }
             return obj;
@@ -567,27 +571,28 @@ public class UsuarioAD extends EntidadAD{
     // MODIFICAR ALUMNO        
     public void ModificarAlumno(Usuario obj) throws Exception{
         try {
-            String dml = " update usuario set";
-//            dml = dml + " usuario_idusu = 'SECRETARIA'";
+            String dml = " update usuario set ";
+            dml = dml + " usuario_idusu = 'SECRETARIA'";
 //            dml = dml + ",codigo = '"+obj.getCodigo()+"'";
 //            dml = dml + ",codusu = '"+obj.getCodUsu()+"'";
-//            dml = dml + ",apepatusu = '"+obj.getApepatUsu()+"'";
-//            dml = dml + ",apematusu = '"+obj.getApematUsu()+"'";
-            dml = dml + " nomusu = '"+obj.getNomUsu()+"'";
-//            dml = dml + ",genusu = '"+obj.getGenUsu()+"'";
-//            dml = dml + ",edadusu = '"+obj.getEdadUsu()+"'";
-//            dml = dml + ",dirusu = '"+obj.getDirUsu()+"'";
-//            dml = dml + ",colegioprocusu = '"+obj.getColProc()+"'";
-//            dml = dml + ",nick = '"+obj.getNick()+"'";
-//            dml = dml + ",pass = '"+obj.getPass()+"'";
-//            dml = dml + ",rol = 'ALUMNO'";
+            dml = dml + ",apepatusu = '"+obj.getApepatUsu()+"'";
+            dml = dml + ",apematusu = '"+obj.getApematUsu()+"'";
+            dml = dml + ",nomusu = '"+obj.getNomUsu()+"'";
+            dml = dml + ",genusu = '"+obj.getGenUsu()+"'";
+            dml = dml + ",edadusu = '"+obj.getEdadUsu()+"'";
+            dml = dml + ",dirusu = '"+obj.getDirUsu()+"'";
+            dml = dml + ",colegioprocusu = '"+obj.getColProc()+"'";
+            dml = dml + ",nick = '"+obj.getNick()+"'";
+            dml = dml + ",pass = '"+obj.getPass()+"'";
+            dml = dml + ",rol = 'ALUMNO'";
 //            dml = dml + ",estado = 'HABILITADO'";
-//            dml = dml + ",telefono = '"+obj.getTelefono()+"'";
-//            dml = dml + ",correo = '"+obj.getCorreo()+"'";
-//            dml = dml + ",imagen = '"+obj.getImagen()+"'";
+            dml = dml + ",telefono = '"+obj.getTelefono()+"'";
+            dml = dml + ",correo = '"+obj.getCorreo()+"'";
+            dml = dml + ",imagen = '"+obj.getImagen()+"'";
             dml = dml + " where";
             dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and rol = 'ALUMNO' and estado = 'HABILITADO' and usuario_idusu='SECRETARIA'";
             dml = dml + ";";
+//              String dml = "update usuario set nomusu = '"+obj.getNomUsu()+"' where idusu='"+obj.getIdUsu().toString()+"' and rol = 'ALUMNO' and estado='HABILITADO' and usuario_idusu='SECRETARIA';";  
             
             EjecutarSentenciaDML(dml);            
         } catch (Exception e) {
