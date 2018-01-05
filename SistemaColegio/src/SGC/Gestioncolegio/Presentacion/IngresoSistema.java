@@ -1,6 +1,6 @@
 package SGC.Gestioncolegio.Presentacion;
 
-import SGC.Gestioncolegio.Entidades.Rol;
+
 import SGC.Gestioncolegio.Entidades.Usuario;
 import SGC.Gestioncolegio.LogicaNegocios.UsuarioLN;
 import Util.Util;
@@ -33,6 +33,7 @@ public class IngresoSistema extends javax.swing.JDialog {
         btnIngresar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
+        setTitle("INICIO DE SESION");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -147,10 +148,14 @@ public class IngresoSistema extends javax.swing.JDialog {
             String nick = txtUsuario.getText().trim().toUpperCase();
             String pass = txtContrasena.getText().trim().toUpperCase();
             
-            if(txtUsuario.getText().toUpperCase().trim().equals("") || txtContrasena.getText().toUpperCase().trim().equals("")){
-                JOptionPane.showMessageDialog(null, "No deje ningun campo vacio","Atencion",JOptionPane.WARNING_MESSAGE);
-                
-            } 
+            if(txtUsuario.getText().toUpperCase().trim().equals("")){
+                JOptionPane.showMessageDialog(null, "Ingrese Cuenta de Usuario","Atención",JOptionPane.WARNING_MESSAGE);
+                txtUsuario.requestFocus();
+            }
+            else if(txtContrasena.getText().toUpperCase().trim().equals("")){
+                JOptionPane.showMessageDialog(null, "Ingrese Clave de la cuenta","Atención",JOptionPane.WARNING_MESSAGE);
+                txtContrasena.requestFocus();
+            }
             else{
                 
                 Usuario usuarioEncontrado = usuarioLN.ConsultarUsuario(nick, pass);
@@ -158,17 +163,42 @@ public class IngresoSistema extends javax.swing.JDialog {
                 if(usuarioEncontrado == null){
                     JOptionPane.showMessageDialog(null, "Usuario inexistente, porfavor verifique la cuenta, o ponganse en contacto con el ADMINISTRADOR","Atención",JOptionPane.WARNING_MESSAGE);
                     txtUsuario.setText("");
-                txtContrasena.setText("");
-                txtUsuario.requestFocus();
-                } else {
+                    txtContrasena.setText("");
+                    txtUsuario.requestFocus();
+                } else {                    
                     JOptionPane.showMessageDialog(null, "Bienvenido Usuario: "+usuarioEncontrado.getNomUsu()+" "+usuarioEncontrado.getApepatUsu()+" "+usuarioEncontrado.getApematUsu(),"Bienvenido",JOptionPane.INFORMATION_MESSAGE);
-//                    IngresoSistema.this.dispose();
+                    //                    IngresoSistema.this.dispose();
                     this.dispose();
                     Principal oPrincipal = new Principal();
                     oPrincipal.setVisible(true);
-                    
-                }
-                
+                    if(usuarioEncontrado.getRol().equals("SECRETARIA")){
+                        Principal.mnuSecretaria.setVisible(false);
+                        Principal.mnuDirector.setVisible(false);
+                    }
+                    else if(usuarioEncontrado.getRol().equals("DIRECTOR")){
+                        Principal.mnuAlumnos.setVisible(false);
+                        Principal.mnuDirector.setVisible(false);
+                        Principal.mnuProfesores.setVisible(false);
+                    }    
+                    else if(usuarioEncontrado.getRol().equals("ALUMNO")){
+                        Principal.mnuAlumnos.setVisible(false);
+                        Principal.mnuDirector.setVisible(false);
+                        Principal.mnuProfesores.setVisible(false);
+                        Principal.mnuSecretaria.setVisible(false);                        
+                    }    
+                    else if(usuarioEncontrado.getRol().equals("PROFESOR")){
+                        Principal.mnuAlumnos.setVisible(false);
+                        Principal.mnuDirector.setVisible(false);
+                        Principal.mnuProfesores.setVisible(false);
+                        Principal.mnuSecretaria.setVisible(false);                        
+                    }    
+                    else if(usuarioEncontrado.getRol().equals("ADMINISTRADOR")){
+                        Principal.mnuAlumnos.setVisible(false);
+//                        Principal.mnuDirector.setVisible(false);
+                        Principal.mnuProfesores.setVisible(false);
+                        Principal.mnuSecretaria.setVisible(false);                        
+                    }    
+                }                
             }
         } catch (Exception e) {            
             JOptionPane.showMessageDialog(null, "No se puede ingresar al sistema","ERROR",JOptionPane.ERROR_MESSAGE);
@@ -186,7 +216,12 @@ public class IngresoSistema extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
+        if(JOptionPane.showConfirmDialog(null,"¿Desea salir del Sistema?","Mensaje del Sistema",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+        else{
+            setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     /**

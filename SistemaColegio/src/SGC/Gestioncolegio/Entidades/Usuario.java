@@ -1,7 +1,8 @@
 package SGC.Gestioncolegio.Entidades;
 public class Usuario {
     private Integer IdUsu;
-    private Usuario Usuario_IdUsu;
+    private String Usuario_IdUsu;
+    private String Codigo;
     private String CodUsu;
     private String ApepatUsu;
     private String ApematUsu;
@@ -25,9 +26,10 @@ public class Usuario {
         this.IdUsu = IdUsu;
     }
 
-    public Usuario(Integer IdUsu, Usuario Usuario_IdUsu, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String DirUsu, String EdadUsu, String ColProc, String Nick, String Pass, String Rol, String Estado, String Telefono, String Correo, String Imagen) {
+    public Usuario(Integer IdUsu, String Usuario_IdUsu, String Codigo, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String DirUsu, String EdadUsu, String ColProc, String Nick, String Pass, String Rol, String Estado, String Telefono, String Correo, String Imagen) {
         this.IdUsu = IdUsu;
         this.Usuario_IdUsu = Usuario_IdUsu;
+        this.Codigo = Codigo;
         this.CodUsu = CodUsu;
         this.ApepatUsu = ApepatUsu;
         this.ApematUsu = ApematUsu;
@@ -53,12 +55,20 @@ public class Usuario {
         this.IdUsu = IdUsu;
     }
 
-    public Usuario getUsuario_IdUsu() {
+    public String getUsuario_IdUsu() {
         return Usuario_IdUsu;
     }
 
-    public void setUsuario_IdUsu(Usuario Usuario_IdUsu) {
+    public void setUsuario_IdUsu(String Usuario_IdUsu) {
         this.Usuario_IdUsu = Usuario_IdUsu;
+    }
+
+    public String getCodigo() {
+        return Codigo;
+    }
+
+    public void setCodigo(String Codigo) {
+        this.Codigo = Codigo;
     }
 
     public String getCodUsu() {
