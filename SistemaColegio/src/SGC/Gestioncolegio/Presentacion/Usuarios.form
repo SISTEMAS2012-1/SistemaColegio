@@ -130,12 +130,11 @@
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnFoto" min="-2" pref="130" max="-2" attributes="0"/>
-                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                          <Component id="lblCodigo2" alignment="0" min="-2" pref="64" max="-2" attributes="3"/>
-                          <Component id="lblFoto" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnFoto" pref="130" max="32767" attributes="0"/>
+                      <Component id="lblCodigo2" alignment="0" min="-2" pref="64" max="-2" attributes="3"/>
+                      <Component id="lblFoto" alignment="0" pref="130" max="32767" attributes="0"/>
+                      <Component id="txtFoto" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -227,7 +226,9 @@
                           <Component id="lblCodigo2" min="-2" pref="17" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                           <Component id="lblFoto" min="-2" pref="109" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <Component id="txtFoto" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnFoto" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -347,7 +348,7 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="3">
                 <StringItem index="0" value=""/>
-                <StringItem index="1" value="M"/>
+                <StringItem index="1" value="MASCULINO"/>
                 <StringItem index="2" value="FEMENINO"/>
               </StringArray>
             </Property>
@@ -575,6 +576,8 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Id"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtFoto">
         </Component>
       </SubComponents>
     </Container>

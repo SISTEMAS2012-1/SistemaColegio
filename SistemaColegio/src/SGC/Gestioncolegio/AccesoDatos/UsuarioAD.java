@@ -5,10 +5,14 @@ import Conector.EntidadAD;
 
 import SGC.Gestioncolegio.Entidades.Usuario;
 import SGC.Gestioncolegio.Presentacion.Usuarios;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import org.codehaus.groovy.ant.FileScanner;
 
 public class UsuarioAD extends EntidadAD{
     
@@ -49,7 +53,7 @@ public class UsuarioAD extends EntidadAD{
     
     public String getCodigo() throws Exception{
         try {
-            String sql = "select lpad(cast(case when min(cast(codigo as integer)) is null then 1 else (min(cast(codigo as integer)) + 1) end as character varying),4,'0') as codigo from usuario";
+            String sql = "select lpad(cast(case when max(cast(codigo as integer)) is null then 1 else (max(cast(codigo as integer)) + 1) end as character varying),4,'0') as codigo from usuario";
 //            String sql  = "select lpad(cast(case when max(cast(codigo as integer)) is null then 1 when (max(cast(codigo as integer)) + 1) is null then 2 else(min(cast(codigo as integer)) + 1) end as character varying),4,'0') as codigo from alumno";
             String codigo = "";
             
@@ -89,7 +93,7 @@ public class UsuarioAD extends EntidadAD{
             sql = sql + " and (codusu = '"+ usuario.getCodUsu()+"'";
             sql = sql + " and apepatusu = '"+ usuario.getApepatUsu()+"'";
             sql = sql + " and apematusu = '"+ usuario.getApematUsu()+"'";
-            sql = sql + " or nomusu = '"+ usuario.getApepatUsu()+"')";
+            sql = sql + " or nomusu = '"+ usuario.getNomUsu()+"')";
             sql = sql + ";";
             Usuario obj = null;
             
@@ -145,6 +149,7 @@ public class UsuarioAD extends EntidadAD{
             sql = sql + ",pass";
             sql = sql + ",telefono";
             sql = sql + ",correo";
+            sql = sql + ",imagen";
             sql = sql + " from usuario ";
             sql = sql + " where ";
             sql = sql + " idusu = " + id.toString();
@@ -172,6 +177,9 @@ public class UsuarioAD extends EntidadAD{
                 obj.setPass(rs.getString("pass"));
                 obj.setTelefono(rs.getString("telefono"));
                 obj.setCorreo(rs.getString("correo"));
+                obj.setImagen(rs.getBytes("imagen"));
+                InputStream bin = rs.getBinaryStream("imagen");
+                obj.setImgaenBin(bin);
                 
             }
             return obj;
@@ -201,6 +209,7 @@ public class UsuarioAD extends EntidadAD{
             sql = sql + ",colegioprocusu";
             sql = sql + ",nick";
             sql = sql + ",pass";
+            sql = sql + ",imagen";
             sql = sql + " from usuario ";
             sql = sql + " where ";
             sql = sql + " (apepatusu like '"+nombre+"%'"+" or nomusu like '"+nombre+"%') and rol='ALUMNO'";
@@ -237,7 +246,9 @@ public class UsuarioAD extends EntidadAD{
 //                obj.setCorreo(rs.getString("correo"));
 //                obj.setImagen(rs.getString("imagen"));
 //                obj.setRol(rs.getString("rol"));
-                
+                obj.setImagen(rs.getBytes("imagen"));
+                InputStream bin = rs.getBinaryStream("imagen");
+                obj.setImgaenBin(bin);
                 lista.add(obj);
             }
             return lista;
@@ -272,7 +283,7 @@ public class UsuarioAD extends EntidadAD{
             sql = sql + " where ";
             sql = sql + " (apepatusu like '"+nombre+"%'"+" or nomusu like '"+nombre+"%') and rol='PROFESOR'";
             sql = sql + " order by";
-            sql = sql + " nomusu asc";
+            sql = sql + " apepatusu asc";
             sql = sql + ";";
             
 //            String sql = "select * from usuario where nomusu like '"+nombre+"%' and rol = 'ALUMNO' order by nomusu asc";
@@ -621,7 +632,7 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ",correo = '"+obj.getCorreo()+"'";
             dml = dml + ",imagen = '"+obj.getImagen()+"'";
             dml = dml + " where";
-            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and rol = 'PROFESOR' and estado = 'HABILITADO' and usuario_idusuario='SECRETARIA'";
+            dml = dml + " idusu = '"+obj.getIdUsu().toString()+"' and rol = 'PROFESOR' and estado = 'HABILITADO' and usuario_idusu='SECRETARIA'";
             dml = dml + ";";
             
             EjecutarSentenciaDML(dml);            
@@ -698,6 +709,21 @@ public class UsuarioAD extends EntidadAD{
             dml = dml + ";";
             
             EjecutarSentenciaDML(dml);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    
+    public void RecuperarImagen(Integer id) throws Exception{
+        try {
+            String sql = " select ";
+            sql = sql + " imagen";
+            sql = sql + " where";
+            sql = sql + " idusu = "+id;
+            sql = sql + ";";
+//              String dml = "update usuario set nomusu = '"+obj.getNomUsu()+"' where idusu='"+obj.getIdUsu().toString()+"' and rol = 'ALUMNO' and estado='HABILITADO' and usuario_idusu='SECRETARIA';";  
+            
+            EjecutarSentenciaSQL(sql);            
         } catch (Exception e) {
             throw e;
         }

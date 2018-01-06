@@ -1,4 +1,7 @@
 package SGC.Gestioncolegio.Entidades;
+
+import java.io.InputStream;
+
 public class Usuario {
     private Integer IdUsu;
     private String Usuario_IdUsu;
@@ -17,8 +20,8 @@ public class Usuario {
     private String Estado;
     private String Telefono;
     private String Correo;
-    private String Imagen;
-
+    private byte[] Imagen;
+    private InputStream imgaenBin;
     public Usuario() {
     }
 
@@ -26,7 +29,7 @@ public class Usuario {
         this.IdUsu = IdUsu;
     }
 
-    public Usuario(Integer IdUsu, String Usuario_IdUsu, String Codigo, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String DirUsu, String EdadUsu, String ColProc, String Nick, String Pass, String Rol, String Estado, String Telefono, String Correo, String Imagen) {
+    public Usuario(Integer IdUsu, String Usuario_IdUsu, String Codigo, String CodUsu, String ApepatUsu, String ApematUsu, String NomUsu, String GenUsu, String DirUsu, String EdadUsu, String ColProc, String Nick, String Pass, String Rol, String Estado, String Telefono, String Correo, byte[] Imagen, InputStream imgaenBin) {
         this.IdUsu = IdUsu;
         this.Usuario_IdUsu = Usuario_IdUsu;
         this.Codigo = Codigo;
@@ -45,6 +48,7 @@ public class Usuario {
         this.Telefono = Telefono;
         this.Correo = Correo;
         this.Imagen = Imagen;
+        this.imgaenBin = imgaenBin;
     }
 
     public Integer getIdUsu() {
@@ -183,12 +187,20 @@ public class Usuario {
         this.Correo = Correo;
     }
 
-    public String getImagen() {
+    public byte[] getImagen() {
         return Imagen;
     }
 
-    public void setImagen(String Imagen) {
+    public void setImagen(byte[] Imagen) {
         this.Imagen = Imagen;
+    }
+
+    public InputStream getImgaenBin() {
+        return imgaenBin;
+    }
+
+    public void setImgaenBin(InputStream imgaenBin) {
+        this.imgaenBin = imgaenBin;
     }
 
     

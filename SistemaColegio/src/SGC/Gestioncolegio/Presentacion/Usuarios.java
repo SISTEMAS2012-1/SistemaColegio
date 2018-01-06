@@ -1,5 +1,6 @@
 package SGC.Gestioncolegio.Presentacion;
 
+import SGC.Gestioncolegio.AccesoDatos.UsuarioAD;
 import SGC.Gestioncolegio.Entidades.Usuario;
 import SGC.Gestioncolegio.LogicaNegocios.UsuarioLN;
 import java.awt.Toolkit;
@@ -8,15 +9,26 @@ import javax.swing.JOptionPane;
 import Util.Util;
 import Util.mdlGeneral;
 import java.awt.Image;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 public class Usuarios extends javax.swing.JDialog {
     boolean modificar = false;
-    String [] columnas = {"Id","Nº","Código","Apellido Paterno","Apellido Materno","Nombre","Genero","Colegio de Procedencia","Usuario","Contraseña"};
+    String [] columnas = {"Id","Nº","Código","Apellido Paterno","Apellido Materno","Nombre","Genero","Colegio de Procedencia","Usuario","Contraseña","Foto"};
     Integer fila = 0;
     Usuario usuario = new Usuario();
     public Usuarios() {
@@ -26,10 +38,10 @@ public class Usuarios extends javax.swing.JDialog {
         Util.AplicarIcono(this);
         tblUsuarios.setModel(new mdlGeneral(columnas));
 
-        Integer [] anchos = {0,100,150,150,150,150,150,150,150,150};
-        Integer[] alineaciones = {JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT};
-        String[] formatos = {"Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena"};
-        String[] modos = {"Normal","Normal","Normal","Normal","Normal","Normal","Normal","Normal","Normal","Normal"};
+        Integer [] anchos = {0,100,150,150,150,150,150,150,150,150,0};
+        Integer[] alineaciones = {JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT,JLabel.LEFT};
+        String[] formatos = {"Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena","Cadena"};
+        String[] modos = {"Normal","Normal","Normal","Normal","Normal","Normal","Normal","Normal","Normal","Normal","Normal"};
         
         Util.AplicarEstilos(tblUsuarios, anchos, alineaciones, formatos, modos);
 
@@ -45,7 +57,7 @@ public class Usuarios extends javax.swing.JDialog {
         Object[] newdata;
         
         for (int i = 0; i < lista.size(); i++) {
-            newdata = new Object[10];
+            newdata = new Object[11];
             
             newdata[0] = lista.get(i).getIdUsu();
             newdata[1] = (i + 1);
@@ -57,7 +69,7 @@ public class Usuarios extends javax.swing.JDialog {
             newdata[7] = lista.get(i).getColProc();
             newdata[8] = lista.get(i).getNick();
             newdata[9] = lista.get(i).getPass();
-            
+            newdata[10] = lista.get(i).getImagen();
             datos.add(newdata);           
         }
         return datos;
@@ -81,7 +93,7 @@ public class Usuarios extends javax.swing.JDialog {
     private void ListarUsuarioProfesor() throws Exception{
         try {
             UsuarioLN usuarioLN = new UsuarioLN();
-            ((mdlGeneral)(tblUsuarios.getModel())).setData(aVector(usuarioLN.ConsultarUsuariosAlumnos(txtBuscarNombre.getText().trim().toUpperCase())));
+            ((mdlGeneral)(tblUsuarios.getModel())).setData(aVector(usuarioLN.ConsultarUsuariosProfesor(txtBuscarNombre.getText().trim().toUpperCase())));
             if(((mdlGeneral)(tblUsuarios.getModel())).getRowCount() > 0){
                 tblUsuarios.changeSelection(fila, 0, false,false);
                 btnBuscar.setEnabled(false);
@@ -162,7 +174,7 @@ public class Usuarios extends javax.swing.JDialog {
         txtApepat.setText("");
         txtApemat.setText("");
         txtNombre.setText("");
-        cbxGenero.setSelectedItem("");
+        cbxGenero.setSelectedIndex(0);
         txtEdad.setText("");
         txtDireccion.setText("");
         txtColPro.setText("");
@@ -170,10 +182,12 @@ public class Usuarios extends javax.swing.JDialog {
         txtClave.setText("");;
         txtTelefono.setText("");
         txtCorreo.setText("");
+        lblFoto.setIcon(null);
         lblFoto.setText("");
-        
-        
+        txtFoto.setText("");        
     }
+    
+    
     
     public void Alumno(){
         txtRol.setText("ALUMNO");        
@@ -231,9 +245,9 @@ public class Usuarios extends javax.swing.JDialog {
                 if(txtRol.getText().equals("ALUMNO")){
                     ListarUsuarioAlumno();
                 }
-                if(txtRol.getText().equals("PROFESOR")){
-                    ListarUsuarioProfesor();
-                }
+                else if(txtRol.getText().equals("PROFESOR")){
+                       ListarUsuarioProfesor();
+                   }
                 
             } else {
                 if(((mdlGeneral)(tblUsuarios.getModel())).getRowCount() > 0){
@@ -283,6 +297,7 @@ public class Usuarios extends javax.swing.JDialog {
         lblFoto = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
         lblId = new javax.swing.JLabel();
+        txtFoto = new javax.swing.JTextField();
         pnlDetalle2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
@@ -367,7 +382,7 @@ public class Usuarios extends javax.swing.JDialog {
         lblGenero.setText("Genero:");
 
         cbxGenero.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cbxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "M", "FEMENINO" }));
+        cbxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "MASCULINO", "FEMENINO" }));
 
         lblEdad.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblEdad.setText("Edad:");
@@ -546,11 +561,11 @@ public class Usuarios extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtApepat, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(29, 29, 29)
-                .addGroup(pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblCodigo2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnFoto, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(lblCodigo2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFoto, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(txtFoto))
                 .addContainerGap())
         );
         pnlDetalleLayout.setVerticalGroup(
@@ -623,7 +638,9 @@ public class Usuarios extends javax.swing.JDialog {
                         .addComponent(lblCodigo2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(3, 3, 3)
+                        .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnFoto))))
         );
 
@@ -877,7 +894,7 @@ public class Usuarios extends javax.swing.JDialog {
                 usuario.setApepatUsu(txtApepat.getText().trim().toUpperCase());
                 usuario.setApematUsu(txtApemat.getText().trim().toUpperCase());
                 usuario.setNomUsu(txtNombre.getText().trim().toUpperCase());
-                usuario.setGenUsu(cbxGenero.getSelectedItem().toString());
+                usuario.setGenUsu(cbxGenero.getSelectedItem().toString().substring(0,1));
                 usuario.setEdadUsu(txtEdad.getText().trim().toUpperCase());
                 usuario.setDirUsu(txtDireccion.getText().trim().toUpperCase());
                 usuario.setColProc(txtColPro.getText().trim().toUpperCase());
@@ -885,15 +902,15 @@ public class Usuarios extends javax.swing.JDialog {
                 usuario.setPass(txtClave.getText().trim().toUpperCase());
                 usuario.setTelefono(txtTelefono.getText().trim().toUpperCase());
                 usuario.setCorreo(txtCorreo.getText().trim().toUpperCase());
-                usuario.setImagen(lblFoto.getText().trim().toUpperCase());
+                usuario.setImagen(lblFoto.getText().getBytes());
                 usuario.setRol(txtRol.getText().trim().toUpperCase());
                 UsuarioLN usuarioLN = new UsuarioLN();
                 Usuario usuarioEncontrado =  usuarioLN.ConsultarUsuario(usuario);
                 
-                if(usuarioEncontrado != null){
-                    JOptionPane.showMessageDialog(null,"Este usuario ya existe","Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);
-                }
-                else{
+//                if(usuarioEncontrado != null){
+//                    JOptionPane.showMessageDialog(null,"Este usuario ya existe","Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);
+//                }
+//                else{
                     if(txtRol.getText().trim().toUpperCase().equals("ALUMNO")){
                         
                         if(modificar){
@@ -903,11 +920,17 @@ public class Usuarios extends javax.swing.JDialog {
                             modificar = false;                            
                             limpiar();
                         }
-                        else{                            
-                            usuarioLN.RegistrarUsuarioAlumno(usuario);
-                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-                            limpiar();
+                        else{            
+                            if(usuarioEncontrado != null){
+                                JOptionPane.showMessageDialog(null,"Este usuario ya existe","Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);
+                            }
+                            else{
+                                usuarioLN.RegistrarUsuarioAlumno(usuario);
+                                JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                                limpiar();
+                            }
                         }
+                        ListarUsuarioAlumno();
                     }
                     if(txtRol.getText().trim().toUpperCase().equals("PROFESOR")){
                         if(modificar){
@@ -917,10 +940,16 @@ public class Usuarios extends javax.swing.JDialog {
                             modificar = false;
                             limpiar();
                         }else{
-                            usuarioLN.RegistrarUsuarioProfesor(usuario);
-                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-                            limpiar();
+                            if(usuarioEncontrado != null){
+                                JOptionPane.showMessageDialog(null,"Este usuario ya existe","Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);
+                            }
+                            else{
+                                usuarioLN.RegistrarUsuarioProfesor(usuario);
+                                JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                                limpiar();
+                            }
                         }
+                        ListarUsuarioProfesor();
                     }
                     if(txtRol.getText().trim().toUpperCase().equals("SECRETARIA")){
                         if(modificar){
@@ -930,9 +959,14 @@ public class Usuarios extends javax.swing.JDialog {
                             modificar = false;
                             limpiar();
                         }else{
-                            usuarioLN.RegistrarSecretaria(usuario);
-                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-                            limpiar();
+                            if(usuarioEncontrado != null){
+                                JOptionPane.showMessageDialog(null,"Este usuario ya existe","Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);
+                            }
+                            else{
+                                usuarioLN.RegistrarSecretaria(usuario);
+                                JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                                limpiar();
+                            }
                         }
                     }
                     if(txtRol.getText().trim().toUpperCase().equals("DIRECTOR")){
@@ -943,19 +977,41 @@ public class Usuarios extends javax.swing.JDialog {
                             modificar = false;
                             limpiar();
                         }else{
-                            usuarioLN.RegistrarDirector(usuario);
-                            JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
-                            limpiar();
+                            if(usuarioEncontrado != null){
+                                JOptionPane.showMessageDialog(null,"Este usuario ya existe","Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);
+                            }
+                            else{
+                                usuarioLN.RegistrarDirector(usuario);
+                                JOptionPane.showMessageDialog(null,"Se registro con éxito el usuario "+txtRol.getText(),"Mensaje del Sistema",JOptionPane.INFORMATION_MESSAGE );
+                                limpiar();
+                            }
                         }
+//                    }
+                    if((JOptionPane.showConfirmDialog(null, "¿Desea seguir registrado?","Mensaje del sSistemas",JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION)){
+                        txtApepat.requestFocus();                        
                     }
+//                    else {
+//                        
+//                    }
                 }                
             }
-            ListarUsuarioAlumno();
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Mensaje del Sistema", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
         
+//    private Image ConvertirImagen(byte[] bytes) throws IOException {
+//        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+//        Iterator readers = ImageIO.getImageReadersByFormatName("jpg");    
+//        ImageReader reader = (ImageReader) readers.next();
+//        Object source = bis;
+//        ImageInputStream iis = ImageIO.createImageInputStream(source);
+//        reader.setInput(iis, true);
+//        ImageReadParam param = reader.getDefaultReadParam();
+//        return reader.read(0, param);
+//    }
+    
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -969,6 +1025,7 @@ public class Usuarios extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnNuevoActionPerformed
 
+    
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         try {
             Integer id = Integer.parseInt(((mdlGeneral)(tblUsuarios.getModel())).getValueAt(tblUsuarios.getSelectedRow(), 0).toString());
@@ -982,22 +1039,57 @@ public class Usuarios extends javax.swing.JDialog {
                 txtApepat.setText(usuario.getApepatUsu());
                 txtApemat.setText(usuario.getApematUsu());
                 txtNombre.setText(usuario.getNomUsu());
-                cbxGenero.setSelectedItem(usuario.getGenUsu());
-    //                    if(((mdlGeneral)(tblUsuarios.getModel())).getValueAt(tblUsuarios.getSelectedRow(), 6).toString().equals(usuario.getGenUsu().substring(0,1))){
-    //                        String genero = "MASCULINO";
-    //                        cbxGenero.setSelectedItem(genero);
-    //                    }
-    //                    else if(((mdlGeneral)(tblUsuarios.getModel())).getValueAt(tblUsuarios.getSelectedRow(), 6).toString().equals(usuario.getGenUsu().substring(0,1))){
-    //                        String genero = "FEMENINO";
-    //                        cbxGenero.setSelectedItem(genero);
-    //                    }
+//                cbxGenero.setSelectedItem(usuario.getGenUsu());
+                if(((mdlGeneral)(tblUsuarios.getModel())).getValueAt(tblUsuarios.getSelectedRow(), 6).toString().equals(usuario.getGenUsu().substring(0,1))){
+                    String genero = "MASCULINO";
+                    cbxGenero.setSelectedItem(genero);
+                }
+                else if(((mdlGeneral)(tblUsuarios.getModel())).getValueAt(tblUsuarios.getSelectedRow(), 6).toString().equals(usuario.getGenUsu().substring(0,1))){
+                    String genero = "FEMENINO";
+                    cbxGenero.setSelectedItem(genero);
+                }
                 txtEdad.setText(usuario.getEdadUsu());
                 txtDireccion.setText(usuario.getDirUsu());
                 txtColPro.setText(usuario.getColProc());
                 txtUsuario.setText(usuario.getNick());
                 txtClave.setText(usuario.getPass());
                 txtTelefono.setText(usuario.getTelefono());
-                txtCorreo.setText(usuario.getCorreo()); 
+                txtCorreo.setText(usuario.getCorreo());                 
+//                lblFoto.setIcon(usuario.getImagen());
+                String img=tblUsuarios.getValueAt(fila, 10).toString();
+                txtFoto.setText(img);
+                Image foto = getToolkit().getImage(img);
+                foto= foto.getScaledInstance(210, 210, 1);
+                lblFoto.setIcon(new ImageIcon(foto));
+//                FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivo de Imagen","jpg");
+//                JFileChooser fichero = new JFileChooser();
+//                fichero.setFileFilter(filtro);
+//
+//                int option = fichero.showOpenDialog(this);
+//                if(option==JFileChooser.APPROVE_OPTION){
+//                    String fil = fichero.getSelectedFile().getPath();
+//                    String file = fichero.getSelectedFile().toString();
+//                    lblFoto.setIcon(new ImageIcon(fil));
+//                    ImageIcon icon = new ImageIcon(fil);
+//                    Image img = icon.getImage();
+//                    Image newimg = img.getScaledInstance(130, 109, java.awt.Image.SCALE_SMOOTH);
+//                    ImageIcon newIcon = new ImageIcon(newimg);
+//                    lblFoto.setIcon(newIcon);
+//                    lblFoto.setSize(130,109);
+//                    lblFoto.setText(fil); 
+//                    txtFoto.setText(fil);
+//
+//                }
+//                String foto = ((mdlGeneral)(tblUsuarios.getModel())).getValueAt(tblUsuarios.getSelectedRow(),10);                
+//                lblFoto.setIcon(new ImageIcon(foto));
+//                ImageIcon icon = new ImageIcon(foto);
+//                Image img = icon.getImage();
+//                Image newimg = img.getScaledInstance(130, 109, java.awt.Image.SCALE_SMOOTH);
+//                ImageIcon newIcon = new ImageIcon(newimg);
+//                lblFoto.setIcon(newIcon);
+//                lblFoto.setSize(130,109);
+//                lblFoto.setText(foto); 
+//                txtFoto.setText(foto);
                 Nuevo();
                 modificar = true;
             } else {
@@ -1005,10 +1097,10 @@ public class Usuarios extends javax.swing.JDialog {
            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje del Sistema",JOptionPane.ERROR_MESSAGE);
-        }
-        
+        }        
     }//GEN-LAST:event_btnModificarActionPerformed
 
+    
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
             if(tblUsuarios.getSelectedRow() != -1){
@@ -1023,7 +1115,12 @@ public class Usuarios extends javax.swing.JDialog {
                     if(fila > 0){
                         fila--;
                     }
-                    ListarUsuarioAlumno();
+                    if(txtRol.getText().equals("ALUMNO")){
+                        ListarUsuarioAlumno();
+                    } else if(txtRol.getText().equals("PROFESOR")){
+                        ListarUsuarioProfesor();
+                    }
+                    
                 }
             }else{
                 JOptionPane.showMessageDialog(null,"Debe seleccionar un Usuario"+txtRol.getName(),"Mensaje del Sistema",JOptionPane.WARNING_MESSAGE);
@@ -1110,7 +1207,8 @@ public class Usuarios extends javax.swing.JDialog {
             ImageIcon newIcon = new ImageIcon(newimg);
             lblFoto.setIcon(newIcon);
             lblFoto.setSize(130,109);
-            lblFoto.setText(fil);
+            lblFoto.setText(fil); 
+            txtFoto.setText(fil);
                   
         }
         
@@ -1122,6 +1220,7 @@ public class Usuarios extends javax.swing.JDialog {
             if(evt.getClickCount() == 1){
                 fila = tblUsuarios.getSelectedRow();
                 Desbloquear();
+                limpiar();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje del Sistema",JOptionPane.ERROR_MESSAGE);
@@ -1173,6 +1272,7 @@ public class Usuarios extends javax.swing.JDialog {
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtEdad;
+    private javax.swing.JTextField txtFoto;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtRol;
